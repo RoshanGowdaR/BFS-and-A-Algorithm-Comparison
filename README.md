@@ -1,15 +1,16 @@
-# AI Search Visualizer (BFS vs A*)
+# AI Search Visualizer (Multi-Algorithm)
 
-An interactive, side-by-side visualizer that compares Breadth-First Search (BFS) and A* on the same maze. It highlights explored nodes, the final shortest path, and a comparison summary to show how the heuristic improves efficiency.
+An interactive visualizer that compares up to 3 search algorithms on the same maze. It highlights explored nodes, the final path, and a comparison summary to show efficiency differences.
 
 ![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38B2AC?logo=tailwindcss&logoColor=white)
 
 ## Features
-- Side-by-side BFS and A* visualization
-- Interactive maze grid (draw walls by click/drag)
-- Random maze generation with guaranteed paths
+- Compare up to 3 algorithms at once
+- Algorithm selector dropdowns with duplicate prevention
+- User-defined start/end selection before maze generation
+- Random maze generation with guaranteed path between chosen endpoints
 - Animated exploration and path rendering
 - Results summary with explored nodes, path length, and time
 
@@ -27,12 +28,19 @@ Add screenshots of the BFS vs A* comparison view and the results panel.
 ## How It Works
 - **BFS** explores the grid level by level with no heuristic, guaranteeing the shortest path.
 - **A*** uses Manhattan distance as a heuristic to guide the search and typically explores fewer nodes.
-- Both algorithms run on identical mazes for a fair comparison.
+- **DFS** explores depth-first and may not find the shortest path.
+- **Greedy Best-First** prioritizes nodes closest to the goal (heuristic only).
+- **Uniform-Cost** expands by path cost (optimal with unit weights).
+- **DLS / IDDFS** explore with depth limits (IDDFS is complete but slower).
+- **Bidirectional** searches from start and end simultaneously.
+- **Memory-Bounded** limits open-set size for a bounded heuristic search.
+- **Hill-Climbing** can get stuck in local maxima.
 
 ## Key Highlights
 - The grid shows explored nodes and the final path simultaneously for clearer comparisons.
 - The results panel summarizes explored nodes, path length, and time taken.
-- Maze generation uses an iterative recursive-backtracker with extra openings for multiple routes.
+- Winner is based on fewest explored nodes (tie-breaker: time, then path length).
+- Maze generation guarantees a path between your chosen start and end cells.
 
 ## Running Locally
 1. Install dependencies:
@@ -56,10 +64,11 @@ npm run build
 - **Output directory:** `dist`
 
 ## Controls
-- **Generate Maze:** Creates a new randomized maze.
-- **Clear Board:** Resets the grid to empty.
-- **Start:** Runs BFS and A* side by side.
+- **Generate Maze:** If no start/end selected, prompts you to pick them. Then generates a maze.
+- **Clear Board:** Resets the grid to empty (no start/end).
+- **Start:** Runs the selected algorithms side by side.
 - **Reset:** Clears exploration results but keeps the maze.
+- **Compare:** Choose 1–3 algorithms to compare.
 - **Speed:** Adjusts animation speed.
 
 ## Project Structure
@@ -80,12 +89,20 @@ src/
 └── utils/
     ├── mazeGenerator.js
     ├── gridHelpers.js
-    ├── bfs.js
-    └── astar.js
+   ├── bfs.js
+   ├── astar.js
+   ├── dfs.js
+   ├── greedyBestFirst.js
+   ├── uniformCost.js
+   ├── depthLimited.js
+   ├── iterativeDeepening.js
+   ├── bidirectional.js
+   ├── memoryBounded.js
+   └── hillClimbing.js
 ```
 
 ## Notes
-- The maze generator guarantees at least one valid path and multiple routes.
+- Some algorithms (DFS, Greedy, Hill-Climbing) do not guarantee the shortest path.
 - Results remain visible after the run so you can inspect explored areas.
 
 ## Troubleshooting
